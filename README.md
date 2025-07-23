@@ -1,88 +1,194 @@
 # FTP Watcher Avançado
 
-## Visão Geral
+## 📋 Visão Geral
 
-O **FTP Watcher Avançado** é uma aplicação Python com interface web (Flask) que permite monitorar múltiplas pastas locais e fazer upload automático de arquivos alterados ou novos para diferentes destinos FTP. É ideal para sincronizar conteúdos como plugins e temas de WordPress, ou qualquer outro projeto que exija a replicação de arquivos locais para um servidor remoto de forma contínua.
+O **FTP Watcher Avançado** é uma solução completa para sincronização automática de arquivos locais com servidores FTP. Desenvolvido em Python com interface web Flask, oferece monitoramento em tempo real de múltiplas pastas e upload automático para diferentes destinos FTP.
 
-A aplicação é dividida em duas partes principais:
-1.  **Interface Web (Flask):** Para gerenciar os dados de conexão FTP (sites) e as pastas locais a serem monitoradas, com seus respectivos destinos remotos. As configurações são salvas em um banco de dados SQLite.
-2.  **Serviço de Monitoramento (`watcher_service.py`):** Roda em segundo plano, monitorando as pastas configuradas e realizando os uploads automáticos via FTP quando detecta alterações (criação ou modificação de arquivos/subpastas).
+### ✨ Principais Características
 
-## Funcionalidades
+- **🔄 Sincronização Automática**: Upload instantâneo de arquivos novos ou modificados
+- **🌐 Múltiplos Sites FTP**: Gerencie diversos servidores FTP simultaneamente
+- **📁 Múltiplas Pastas**: Configure várias pastas por site com destinos específicos
+- **🎨 Interface Web Intuitiva**: Gerenciamento completo via navegador com Bootstrap
+- **🗃️ Banco de Dados SQLite**: Configurações persistentes e confiáveis
+- **📊 Logs em Tempo Real**: Monitoramento detalhado das operações
 
-* **Gerenciamento de Múltiplos Sites:** Cadastre diversos destinos FTP (sites) com seus respectivos hosts, credenciais e portas.
-* **Gerenciamento de Múltiplas Pastas por Site:** Para cada site cadastrado, associe várias pastas locais para monitoramento, cada uma com seu próprio caminho de destino no servidor FTP.
-* **Upload Automático:** Detecta criação e modificação de arquivos e subpastas e os envia para o destino FTP correspondente.
-* **Sincronização de Estrutura:** Mantém a estrutura de subdiretórios no servidor FTP.
-* **Interface Web Amigável (Bootstrap):** Facilita a configuração e gerenciamento através do navegador.
-* **Banco de Dados SQLite:** Armazena todas as configurações de forma persistente.
+### 🎯 Casos de Uso Ideais
 
-## Estrutura do Projeto
+- Sincronização de plugins e temas WordPress
+- Deploy automático de aplicações web
+- Backup contínuo de projetos
+- Sincronização de documentos e assets
+
+## 🏗️ Arquitetura
+
+A aplicação é composta por dois módulos principais:
+
+1. **Interface Web (Flask)**: Gerenciamento de configurações via navegador
+2. **Serviço de Monitoramento**: Processo em background para uploads automáticos
+
+## 📁 Estrutura do Projeto
+
+```
 ftp_watcher_advanced/
-├── app.py                      # Aplicação Flask (interface web)
-├── config_db.py                # Script de inicialização do banco de dados
-├── watcher_service.py          # Serviço de monitoramento e upload
-├── instance/                   # Contém o banco de dados
-│   └── configs.db              # Banco de dados SQLite
-├── templates/                  # Templates HTML do Flask
-│   ├── base.html               # Layout base com Bootstrap
-│   ├── sites/                  # Templates relacionados ao gerenciamento de sites
+├── app.py                    # Aplicação Flask principal
+├── config_db.py              # Inicializador do banco de dados
+├── watcher_service.py        # Serviço de monitoramento
+├── instance/
+│   └── configs.db           # Banco de dados SQLite
+├── templates/
+│   ├── base.html            # Layout base Bootstrap
+│   ├── sites/               # Templates de gerenciamento de sites
 │   │   ├── index.html
 │   │   └── add_edit.html
-│   └── folders/                # Templates relacionados ao gerenciamento de pastas
+│   └── folders/             # Templates de gerenciamento de pastas
 │       ├── index.html
 │       └── add_edit.html
-└── static/                     # Arquivos estáticos (CSS, JS)
-└── css/
-└── custom.css          # CSS personalizado (opcional)
-## Instalação
+└── static/
+    └── css/
+        └── custom.css       # Estilos personalizados
+```
 
-Siga os passos abaixo para configurar e rodar o projeto:
+## 🚀 Instalação
 
-1.  **Clone o Repositório (ou crie a estrutura de pastas):**
-    Crie a pasta raiz `ftp_watcher_advanced` e dentro dela as subpastas `instance`, `templates/sites`, `templates/folders` e `static/css`. Salve todos os arquivos nos seus respectivos locais conforme a estrutura acima.
+### Pré-requisitos
 
-2.  **Instale as Dependências:**
-    Abra seu terminal na pasta raiz do projeto (`ftp_watcher_advanced/`) e execute:
-    ```bash
-    pip install Flask watchdog
-    ```
+- Python 3.7 ou superior
+- pip (gerenciador de pacotes Python)
 
-3.  **Inicialize o Banco de Dados:**
-    Ainda no terminal, dentro da pasta `ftp_watcher_advanced/`, execute:
-    ```bash
-    python config_db.py
-    ```
-    *Se você já rodou o projeto antes, **delete o arquivo `configs.db`** que está em `ftp_watcher_advanced/instance/` antes de executar este comando, para garantir que as tabelas sejam criadas corretamente.*
+### Passos de Instalação
 
-## Como Usar
+1. **Clone ou crie a estrutura do projeto**
+   ```bash
+   mkdir ftp_watcher_advanced
+   cd ftp_watcher_advanced
+   ```
 
-A aplicação é composta por duas partes que devem ser executadas separadamente:
+2. **Instale as dependências**
+   ```bash
+   pip install Flask watchdog
+   ```
 
-1.  **Inicie a Interface Web (Flask):**
-    Abra o **primeiro terminal** na pasta `ftp_watcher_advanced/` e execute:
-    ```bash
-    python app.py
-    ```
-    Acesse a interface no seu navegador, geralmente em `http://127.0.0.1:5000/`. Use esta interface para cadastrar e gerenciar seus sites e as pastas locais que você deseja monitorar.
+3. **Inicialize o banco de dados**
+   ```bash
+   python config_db.py
+   ```
+   
+   > ⚠️ **Nota**: Se já executou o projeto anteriormente, delete o arquivo `instance/configs.db` antes de executar este comando.
 
-2.  **Inicie o Serviço de Monitoramento (`watcher_service.py`):**
-    Após configurar seus sites e pastas na interface web, abra um **segundo terminal** na pasta `ftp_watcher_advanced/` e execute:
-    ```bash
-    python watcher_service.py
-    ```
-    Este terminal mostrará os logs do monitoramento e dos uploads. Ele continuará rodando em segundo plano, observando suas pastas e enviando arquivos automaticamente. **Este serviço deve estar sempre ativo para que os uploads ocorram.**
+## 💻 Como Usar
 
-## Observações Importantes e Melhorias Futuras
+### 1. Inicie a Interface Web
 
-* **Segurança da Senha:** Atualmente, as senhas FTP são armazenadas em **texto simples** no banco de dados SQLite. Isso **não é seguro para ambientes de produção**. Recomenda-se fortemente a implementação de criptografia de senha (ex: usando `cryptography.Fernet`) para proteger as credenciais.
-* **FTP Seguro (FTPS/SFTP):** A conexão FTP padrão não é criptografada. Para maior segurança, considere usar FTPS (FTP sobre SSL/TLS) com `ftplib` ou SFTP (SSH File Transfer Protocol) com uma biblioteca como `paramiko`.
-* **Exclusão Remota:** A aplicação não exclui arquivos no servidor FTP quando são removidos localmente. Esta funcionalidade pode ser implementada, mas deve ser avaliada com cautela devido aos riscos de perda de dados acidental.
-* **Gerenciamento de Erros e Logs:** Para uso em produção, um sistema de logging mais robusto (ex: para arquivos) e a capacidade de re-tentar uploads falhos seriam benéficos.
-* **Implantação em Produção:** Para rodar a aplicação em um servidor de forma contínua, utilize um servidor WSGI para o Flask (ex: Gunicorn, uWSGI) e gerencie o `watcher_service.py` como um serviço do sistema (ex: `systemd` no Linux, `NSSM` no Windows).
+Abra o primeiro terminal e execute:
+
+```bash
+python app.py
+```
+
+Acesse `http://127.0.0.1:5000` no seu navegador para configurar:
+- Sites FTP (hosts, credenciais, portas)
+- Pastas locais para monitoramento
+- Destinos remotos correspondentes
+
+### 2. Inicie o Serviço de Monitoramento
+
+Em um segundo terminal, execute:
+
+```bash
+python watcher_service.py
+```
+
+Este processo:
+- Monitora continuamente as pastas configuradas
+- Realiza uploads automáticos quando detecta alterações
+- Exibe logs detalhados das operações
+- **Deve permanecer ativo** para funcionamento contínuo
+
+## 📝 Configuração Típica
+
+1. **Cadastre um Site FTP**:
+   - Host: `seu-servidor.com`
+   - Usuário: `seu_usuario`
+   - Senha: `sua_senha`
+   - Porta: `21` (padrão)
+
+2. **Configure uma Pasta Local**:
+   - Caminho Local: `/home/usuario/projeto`
+   - Destino Remoto: `/public_html/projeto`
+   - Site: Selecione o site cadastrado
+
+3. **Inicie o monitoramento** e veja os uploads acontecerem automaticamente!
+
+## ⚠️ Considerações de Segurança
+
+### Limitações Atuais
+- **Senhas em texto simples**: Armazenadas sem criptografia no SQLite
+- **FTP não criptografado**: Conexões sem SSL/TLS por padrão
+- **Sem autenticação**: Interface web sem controle de acesso
+
+### Recomendações para Produção
+- Implementar criptografia de senhas (ex: `cryptography.Fernet`)
+- Usar FTPS/SFTP para conexões seguras
+- Adicionar autenticação à interface web
+- Configurar HTTPS com certificados SSL
+
+## 🔧 Melhorias Futuras
+
+### Funcionalidades Planejadas
+- [ ] Exclusão remota de arquivos deletados localmente
+- [ ] Sistema de logs para arquivos
+- [ ] Re-tentativa automática para uploads falhos
+- [ ] Filtros de arquivos por extensão
+- [ ] Notificações via email/webhook
+- [ ] Dashboard com estatísticas
+
+### Produção
+- [ ] Suporte a WSGI (Gunicorn, uWSGI)
+- [ ] Serviços do sistema (systemd, NSSM)
+- [ ] Docker containerization
+- [ ] Monitoramento de performance
+
+## 🐛 Solução de Problemas
+
+### Problemas Comuns
+
+**Erro de conexão FTP**
+- Verifique host, porta e credenciais
+- Teste conectividade de rede
+- Confirme se o servidor aceita conexões FTP
+
+**Arquivos não sendo detectados**
+- Verifique permissões da pasta local
+- Confirme se o serviço de monitoramento está ativo
+- Verifique logs para mensagens de erro
+
+**Interface web não carrega**
+- Confirme se o Flask está rodando na porta correta
+- Verifique se há conflitos de porta
+- Teste em `localhost:5000`
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## 🤝 Contribuições
+
+Contribuições são bem-vindas! Por favor:
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📞 Suporte
+
+Para dúvidas ou problemas:
+- Abra uma [issue](https://github.com/seu-usuario/ftp-watcher-advanced/issues)
+- Consulte a documentação completa
+- Entre em contato via email
 
 ---
 
-## Licença
-
-Este projeto é de código aberto. (Adicione sua licença preferida, ex: MIT, Apache 2.0, etc.)
+**⭐ Se este projeto foi útil, considere dar uma estrela no GitHub!**

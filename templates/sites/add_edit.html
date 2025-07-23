@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center">{{ title }}</h1>
+
+<form method="POST" class="needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="name" class="form-label">Nome do Site (Único):</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ site.name if site else '' }}" required>
+        <div class="form-text">Ex: Meu Site Principal, Blog de Teste</div>
+        <div class="invalid-feedback">
+            Por favor, forneça um nome para o site.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="ftp_host" class="form-label">Host FTP:</label>
+        <input type="text" class="form-control" id="ftp_host" name="ftp_host" value="{{ site.ftp_host if site else '' }}" required>
+        <div class="invalid-feedback">
+            Por favor, insira o host FTP.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="ftp_user" class="form-label">Usuário FTP:</label>
+        <input type="text" class="form-control" id="ftp_user" name="ftp_user" value="{{ site.ftp_user if site else '' }}" required>
+        <div class="invalid-feedback">
+            Por favor, insira o usuário FTP.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="ftp_password" class="form-label">Senha FTP:</label>
+        <input type="password" class="form-control" id="ftp_password" name="ftp_password" value="{{ site.ftp_password if site else '' }}" required>
+        <div class="form-text text-danger">
+            Atenção: A senha é armazenada em texto simples no banco de dados para simplicidade desta demonstração.
+            **NÃO recomendado para ambientes de produção.**
+        </div>
+        <div class="invalid-feedback">
+            Por favor, insira a senha FTP.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="ftp_port" class="form-label">Porta FTP (Padrão: 21):</label>
+        <input type="number" class="form-control" id="ftp_port" name="ftp_port" value="{{ site.ftp_port if site else 21 }}">
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 mt-3">Salvar Site</button>
+</form>
+
+<div class="text-center mt-3">
+    <a href="{{ url_for('list_sites') }}" class="btn btn-secondary">Voltar para a lista de Sites</a>
+</div>
+
+<script>
+    // Exemplo de validação Bootstrap personalizada
+    (function () {
+      'use strict'
+      var forms = document.querySelectorAll('.needs-validation')
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+</script>
+{% endblock %}

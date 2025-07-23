@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center">{{ title }}</h1>
+
+<form method="POST" class="needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="local_path" class="form-label">Caminho da Pasta Local para Monitorar:</label>
+        <input type="text" class="form-control" id="local_path" name="local_path" value="{{ folder.local_path if folder else '' }}" required>
+        <div class="form-text">Ex: C:/meus_projetos/site_a/plugins ou /home/user/wordpress/wp-content/plugins</div>
+        <div class="invalid-feedback">
+            Por favor, insira o caminho da pasta local.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="remote_path" class="form-label">Caminho da Pasta Remota no Servidor FTP:</label>
+        <input type="text" class="form-control" id="remote_path" name="remote_path" value="{{ folder.remote_path if folder else '' }}" required>
+        <div class="form-text">Ex: /public_html/wp-content/plugins ou /site_a/plugins</div>
+        <div class="invalid-feedback">
+            Por favor, insira o caminho da pasta remota no FTP.
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 mt-3">Salvar Pasta</button>
+</form>
+
+<div class="text-center mt-3">
+    <a href="{{ url_for('list_folders', site_id=site.id) }}" class="btn btn-secondary">Voltar para Pastas do Site</a>
+</div>
+
+<script>
+    // Exemplo de validação Bootstrap personalizada
+    (function () {
+      'use strict'
+      var forms = document.querySelectorAll('.needs-validation')
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+</script>
+{% endblock %}
